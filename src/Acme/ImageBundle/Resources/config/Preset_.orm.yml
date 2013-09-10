@@ -1,0 +1,21 @@
+Acme\ImageBundle\Entity\Preset:
+    type: entity
+    table: null
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        preset_name:
+            type: enum
+            #length: 4
+            values: ['IN', 'OUT', 'EXACT'] 
+        mode:
+            type: string
+            length: '100'
+        width:
+            type: integer
+        height:
+            type: integer
+    lifecycleCallbacks: {  }

@@ -1,0 +1,10 @@
+{% extends 'AcmeImageBundle::layout.html.twig' %}
+
+{% block title %}Symfony - Task!{% endblock %}
+
+{% block content_header '' %}
+{% block content %}
+	{{ form(form) }}
+</br>
+<a href="{{ path('acme_image_homepage') }}">Presets list</a>
+{% endblock %}

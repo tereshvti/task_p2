@@ -1,0 +1,10 @@
+acme_image_homepage:
+    pattern:  /presets
+    defaults: { _controller: AcmeImageBundle:Preset:index }
+new_preset:
+    pattern:  /presets/new
+    defaults: { _controller: AcmeImageBundle:Preset:new }
+test_validation:
+    pattern:  /test
+    defaults: { _controller: AcmeImageBundle:Preset:test }
+
