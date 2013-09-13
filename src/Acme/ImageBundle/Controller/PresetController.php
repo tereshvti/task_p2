@@ -4,14 +4,18 @@ namespace Acme\ImageBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Acme\ImageBundle\Entity\Preset2;
+use Acme\ImageBundle\Form\Type\PresetType;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 class PresetController extends Controller
-{
+{	
     public function indexAction()
     {
-         $presets = $this->getDoctrine()
+		$resize = $this->get('image_resize');
+        $presets = $this->getDoctrine()
 			->getRepository('AcmeImageBundle:Preset2')
 			->findAll();
 
@@ -20,20 +24,25 @@ class PresetController extends Controller
 				'No presets found :('
 			);
 		}
-        return $this->render('AcmeImageBundle:Preset:index.html.twig', array('presets' => $presets));
+		//получаем список файлов в \images\origins
+		$dir = getcwd() . '\images\origins';
+		$origins = $resize->find_all_files($dir);
+		
+        return $this->render('AcmeImageBundle:Preset:index.html.twig', array('presets' => $presets, 'origins' => $origins));
     }
 
 	public function newAction(Request $request)
     {
         $preset = new Preset2();
-        $form = $this->createFormBuilder($preset)
+        /*$form = $this->createFormBuilder($preset)
 			->add('name', 'text')
 			->add('mode', 'text')
 			->add('width', 'integer')
 			->add('height', 'integer')
 			->add('save', 'submit')
 			->getForm();
-		
+		*/
+		$form = $this->createForm(new PresetType(), $preset);
 				
 		$form->handleRequest($request);
 		
@@ -63,27 +72,57 @@ class PresetController extends Controller
 			);
 		   return $this->redirect($this->generateUrl('acme_image_homepage'));
 		}
-		
+
         return $this->render('AcmeImageBundle:Preset:new.html.twig', array(
             'form' => $form->createView(),
         ));
 	}
-	
-	public function testAction()
+	public function updateAction(Request $request, $id)
 	{
-		$preset = new Preset2();
+		$em = $this->getDoctrine()->getManager();
 		
-		$preset->setName('test');
-		$preset->setHeight(190);
-		$preset->setWidth(190);
-		$validator = $this->get('validator');
-		$errors = $validator->validate($preset);
+		$preset = $em->getRepository('AcmeImageBundle:Preset2')
+			->find($id);
+		$form = $this->createForm(new PresetType(), $preset);
 		
-		if (count($errors) > 0) {
-			return new Response(print_r($errors, true));
+		$form->handleRequest($request);
+		
+		if ($form->isValid()) {
+
+			$validator = $this->get('validator');
+			$errors = $validator->validate($preset);
+
+			if (count($errors) > 0) {
+				return new Response(print_r($errors, true));
+			}
+			
+			$em->persist($preset);
+			$em->flush();
+			
+			$this->get('session')->getFlashBag()->add(
+				'notice',
+				'Your changes were saved!'
+			);
+		   return $this->redirect($this->generateUrl('acme_image_homepage'));
 		}
-		return new Response(var_dump($errors));
 		
+		return $this->render('AcmeImageBundle:Preset:new.html.twig', array(
+            'form' => $form->createView(),
+        ));
 	}
-    
+    public function testAction()
+	{
+		$fs = new Filesystem();
+		$resize = $this->get('image_resize');
+		//$resize->find_all_files(__DIR__);
+		try {
+			$fs->mkdir('new');
+		} catch (IOException $e) {
+			echo "An error occurred while creating your directory";
+		}
+		$dir = getcwd() . '\images\origins';
+		//return new Response($dir);
+		return new Response(var_dump($resize->find_all_files($dir)));
+	}
+
 }

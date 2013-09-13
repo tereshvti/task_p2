@@ -24,9 +24,8 @@ class Preset2
 
     /**
      * @var string
-     *
-	 * @Assert\NotBlank()
-     * @ORM\Column(name="name", type="string", length=100)
+     * @Assert\NotBlank()
+     * @ORM\Column(name="name", type="string")
      */
     private $name;
 
@@ -34,7 +33,6 @@ class Preset2
      * @var string
      *
 	 * @Assert\NotBlank()
-	 * @Assert\Choice({'IN', 'OUT', 'EXACT'})
      * @ORM\Column(type="string", columnDefinition="enum('IN', 'OUT', 'EXACT')")
      */
     private $mode;

@@ -2,8 +2,6 @@ Acme\ImageBundle\Entity\Preset2:
     properties:
         name:
             - NotBlank: ~
-            - Length:
-                min: 10
         mode:
             - NotBlank: ~
             - Choice: [IN, OUT, EXACT]

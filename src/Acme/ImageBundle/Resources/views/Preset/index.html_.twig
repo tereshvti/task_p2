@@ -9,7 +9,6 @@
 		<h1> List of presets: </h1> </br>
 		{% for preset in presets %}
 			<li>
-				<input type="radio" name="preset" value="{{preset.id}}">
 				{{ preset.name }} ({{preset.mode}}, {{preset.width}}, {{preset.height}}) | 
 				<a href="{{ path('update_preset', {'id': preset.id}) }}"> update! </a> | 
 				<a href="{{ path('destroy_preset', {'id': preset.id}) }}"> destroy! </a>
@@ -23,10 +22,8 @@
 		<h1> List of ogirinal images: </h1> </br>
 		{% for origin in origins %}
 				<ul>
-					<li>
-						<input type="radio" name="origin" value="{{origin}}">
-						{{origin}}
-					</li>
+					
+					<li>{{origin}}</li>
 				</ul>
 		{% endfor %}
 	</div>

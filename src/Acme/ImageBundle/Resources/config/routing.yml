@@ -4,7 +4,13 @@ acme_image_homepage:
 new_preset:
     pattern:  /presets/new
     defaults: { _controller: AcmeImageBundle:Preset:new }
-test_validation:
-    pattern:  /test
+update_preset:
+    pattern:  /presets/{id}
+    defaults: { _controller: AcmeImageBundle:Preset:update }
+destroy_preset:
+    pattern:  /presets/{id}/delete
+    defaults: { _controller: AcmeImageBundle:Preset:destroy }
+test_route:
+    pattern: /yo/test
     defaults: { _controller: AcmeImageBundle:Preset:test }
 

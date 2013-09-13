@@ -1,0 +1,6 @@
+autoload:
+  makeupaname:
+    name: Make up a name
+    path: /src/
+    recursive: on
+   
