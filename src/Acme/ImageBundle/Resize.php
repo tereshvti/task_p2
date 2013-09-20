@@ -33,6 +33,7 @@ class Resize
 		  $new_height  = floor($size[1] * $ratio);
 		  $left_offset = 0;
 		  $top_offset = 0;
+		  $resize = false;
 		  break;
 		case 'OUT':
 		  $x_ratio = $size[0] / $width;
@@ -51,14 +52,14 @@ class Resize
 		  $top_offset = 0;
 		  $new_width   = $width;
 		  $new_height  = $height;
+		  $resize = false;
 
 	  }
 
 	  $isrc = $icfunc($src);
 	  $idest = imagecreatetruecolor($new_width, $new_height);
 	  
-	  imagecopyresampled($idest, $isrc, 0, 0, $left, $top, 
-	  $new_width, $new_height, $size[0]-$left_offset*2, $size[1]-$top_offset*2);
+	  imagecopyresampled($idest, $isrc, 0, 0, $left_offset, $top_offset, $new_width, $new_height, $size[0]-$left_offset*2, $size[1]-$top_offset*2);
 	  
 	  if ($resize) {
 		$resized = imagecreatetruecolor($width, $height);

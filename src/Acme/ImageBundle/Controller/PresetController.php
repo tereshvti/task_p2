@@ -28,20 +28,39 @@ class PresetController extends Controller
 		$dir = getcwd() . '\images\origins';
 		$origins = $resize->find_all_files($dir);
 		
+		/*foreach ($presets as $preset) {
+			$dir = "../images/cache" . $preset->getName();
+			$count[] = count($resize->find_all_files($dir));
+		}*/
+
+		
         return $this->render('AcmeImageBundle:Preset:index.html.twig', array('presets' => $presets, 'origins' => $origins));
     }
 
+	 public function showAction($id)
+    {	
+		$preset = $this->getDoctrine()
+			->getRepository('AcmeImageBundle:Preset2')
+			->find($id);
+		$dir = getcwd() . '\\images\\cache\\' . $preset->getName();
+		$resize = $this->get('image_resize');
+		$files = $resize->find_all_files($dir);
+		$count = count($files);
+		
+		$size = 0;
+		foreach ($files as &$file) {
+		  $size += filesize($dir . "\\" . $file);
+		}
+		
+		//return new Response(count($count));
+		return $this->render('AcmeImageBundle:Preset:show.html.twig', array('preset' => $preset, 'count' => $count, 'size' => $size));
+
+    }
+	
 	public function newAction(Request $request)
     {
         $preset = new Preset2();
-        /*$form = $this->createFormBuilder($preset)
-			->add('name', 'text')
-			->add('mode', 'text')
-			->add('width', 'integer')
-			->add('height', 'integer')
-			->add('save', 'submit')
-			->getForm();
-		*/
+
 		$form = $this->createForm(new PresetType(), $preset);
 				
 		$form->handleRequest($request);
@@ -110,6 +129,8 @@ class PresetController extends Controller
             'form' => $form->createView(),
         ));
 	}
+
+	
     public function testAction()
 	{
 		$fs = new Filesystem();
@@ -122,7 +143,7 @@ class PresetController extends Controller
 		}
 		$dir = getcwd() . '\images\origins';
 		//return new Response($dir);
-		return new Response(var_dump($resize->find_all_files($dir)));
+		return new Response($dir);
 	}
 
 }

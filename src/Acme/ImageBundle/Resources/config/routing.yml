@@ -13,4 +13,9 @@ destroy_preset:
 test_route:
     pattern: /yo/test
     defaults: { _controller: AcmeImageBundle:Preset:test }
-
+ajax_update_mydata:
+  pattern:  /update/data/from/ajax/call
+  defaults: { _controller: AcmeImageBundle:MyAjax:updateData }
+show_preset:
+    pattern:  /presets/{id}/show
+    defaults: { _controller: AcmeImageBundle:Preset:show }

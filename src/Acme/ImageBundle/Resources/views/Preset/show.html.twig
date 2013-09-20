@@ -1,0 +1,20 @@
+{% extends 'AcmeImageBundle::layout.html.twig' %}
+
+{% block title %}Symfony - Task!{% endblock %}
+
+{% block content_header '' %}
+{% block content %}
+
+		<h1> Preset: {{preset.name}} </h1> </br>
+		Mode: {{preset.mode}} </br>
+		Width: {{preset.width}} </br>
+		Heigth: {{preset.height}} </br>
+		Images in folder: {{count}} </br>
+		Folder's size: {{size}} </br>
+		</br>
+		<a href="{{ path('new_preset') }}">Create preset</a>
+
+
+{% endblock %}
+
+
