@@ -33,9 +33,7 @@ class MyajaxController extends Controller
 	  $dest = "\\images\\cache\\" . $preset->getName() . "\\" . $image;
 	  $success = $resize->img_resize($preset->getMode(), $src, $dest, $preset->getWidth(), $preset->getHeight());
 	  
-	  //prepare the response, e.g.
 	  $response = array("code" => 100, "success" => $success, "image" => $image, "dir" => $dir, "exist" => $exist);
-	  //you can return result as JSON
 	  return new Response(json_encode($response)); 
 	}   
 }

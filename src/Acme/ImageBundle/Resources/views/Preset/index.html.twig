@@ -14,7 +14,7 @@
 				<a href="{{ path('show_preset', {'id': preset.id}) }}">{{ preset.name }} </a>
 				({{preset.mode}}, {{preset.width}}, {{preset.height}}) | 
 				<a href="{{ path('update_preset', {'id': preset.id}) }}"> update! </a> | 
-				<a href="{{ path('destroy_preset', {'id': preset.id}) }}"> destroy! </a>
+				<a href="#" id={{preset.id}} class="ajax_delete"> destroy! </a>
 				</br>
 			</li>
 		{% endfor %}
@@ -34,12 +34,12 @@
 					</li>
 				</ul>
 		{% endfor %}
-		<button class="ajax">Apply preset!</button>
+		<button class="ajax_create_preset">Apply preset!</button>
 	</div>
 	
 	
 <script>
-	function aButtonPressed(){
+	function applyPreset(){
 		$.post('{{path('ajax_update_mydata')}}',               
 					{preset: $("input[name='preset']:checked").val(), image: $("input[name='origin']:checked").val()}, 
 				function(response){
@@ -49,9 +49,22 @@
 
 		}, "json");    
 	}
+	function destroyPreset(button){
+		$.post('{{path('destroy_preset')}}',               
+				{id: button.attr('id')}, 
+			function(response){
+					if(response.code == 100 && response.success){
+						button.parent().remove();
+					}
 
+		}, "json");    
+	}
+	
 	$(document).ready(function() {     
-	  $('.ajax').on('click', function(){aButtonPressed();});
+	  $('.ajax_create_preset').on('click', function(){applyPreset();});
+	  $('.ajax_delete').on('click', function(){
+		 destroyPreset($(this));
+	  });
 	});	
 </script>
 

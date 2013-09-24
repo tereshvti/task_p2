@@ -7,9 +7,8 @@ new_preset:
 update_preset:
     pattern:  /presets/{id}
     defaults: { _controller: AcmeImageBundle:Preset:update }
-destroy_preset:
-    pattern:  /presets/{id}/delete
-    defaults: { _controller: AcmeImageBundle:Preset:destroy }
+    requirements:
+       id:  \d+
 test_route:
     pattern: /yo/test
     defaults: { _controller: AcmeImageBundle:Preset:test }
@@ -19,3 +18,6 @@ ajax_update_mydata:
 show_preset:
     pattern:  /presets/{id}/show
     defaults: { _controller: AcmeImageBundle:Preset:show }
+destroy_preset:
+    pattern:  /presets/destroy
+    defaults: { _controller: AcmeImageBundle:Preset:destroy }

@@ -28,12 +28,6 @@ class PresetController extends Controller
 		$dir = getcwd() . '\images\origins';
 		$origins = $resize->find_all_files($dir);
 		
-		/*foreach ($presets as $preset) {
-			$dir = "../images/cache" . $preset->getName();
-			$count[] = count($resize->find_all_files($dir));
-		}*/
-
-		
         return $this->render('AcmeImageBundle:Preset:index.html.twig', array('presets' => $presets, 'origins' => $origins));
     }
 
@@ -44,15 +38,17 @@ class PresetController extends Controller
 			->find($id);
 		$dir = getcwd() . '\\images\\cache\\' . $preset->getName();
 		$resize = $this->get('image_resize');
-		$files = $resize->find_all_files($dir);
-		$count = count($files);
-		
 		$size = 0;
-		foreach ($files as &$file) {
-		  $size += filesize($dir . "\\" . $file);
+		$count = 0;
+		if (file_exists($dir)) {
+			$files = $resize->find_all_files($dir);
+			$count = count($files);
+			foreach ($files as &$file) {
+			  $size += filesize($dir . "\\" . $file);
+			}
 		}
 		
-		//return new Response(count($count));
+		//return new Response($count);
 		return $this->render('AcmeImageBundle:Preset:show.html.twig', array('preset' => $preset, 'count' => $count, 'size' => $size));
 
     }
@@ -129,7 +125,18 @@ class PresetController extends Controller
             'form' => $form->createView(),
         ));
 	}
-
+	public function destroyAction()
+	{
+		$request = $this->container->get('request');    
+		$id = $request->request->get('id');
+		$em = $this->getDoctrine()->getManager();
+		$preset = $em->getRepository('AcmeImageBundle:Preset2')
+			->find($id);
+		$em->remove($preset);
+		$em->flush();
+	    $response = array("code" => 100, "success" => true);
+	    return new Response(json_encode($response)); 
+	}
 	
     public function testAction()
 	{
