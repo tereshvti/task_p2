@@ -18,12 +18,12 @@ class PresetController extends Controller
         $presets = $this->getDoctrine()
 			->getRepository('AcmeImageBundle:Preset2')
 			->findAll();
-
+/*
 		if (!$presets) {
 			throw $this->createNotFoundException(
 				'No presets found :('
 			);
-		}
+		}*/
 		//получаем список файлов в \images\origins
 		$dir = getcwd() . '\images\origins';
 		$origins = $resize->find_all_files($dir);
@@ -130,8 +130,12 @@ class PresetController extends Controller
 		$request = $this->container->get('request');    
 		$id = $request->request->get('id');
 		$em = $this->getDoctrine()->getManager();
-		$preset = $em->getRepository('AcmeImageBundle:Preset2')
-			->find($id);
+		$preset = $em->getRepository('AcmeImageBundle:Preset2')->find($id);
+		//формируем путь к директории пресета и удаляем её, если она существует
+		$dir = getcwd() . '\\images\\cache\\' . $preset->getName();
+		$img_resize = $this->get('image_resize');
+		if (is_dir($dir)) $img_resize->deleteDir($dir);
+		//удаляем пресет из БД
 		$em->remove($preset);
 		$em->flush();
 	    $response = array("code" => 100, "success" => true);
