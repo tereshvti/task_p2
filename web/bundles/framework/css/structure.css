@@ -6,6 +6,7 @@ body {
     color: #333;
 }
 .sf-reset, .sf-reset .block, .sf-reset #message {
+	overflow: auto;
     margin: auto;
 }
 img {
@@ -59,6 +60,7 @@ img {
     -webkit-appearance: textfield;
 }
 #content {
+	overflow: auto;
     width: 970px;
     margin: 0 auto;
 }

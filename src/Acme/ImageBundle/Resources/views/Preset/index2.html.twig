@@ -5,27 +5,36 @@
 {% block content_header '' %}
 {% block content %}
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-
 	<div style="width:400px;float:left">
 		<h1> List of presets: </h1> </br>
+		<table>
 		<tr> 
 			<th>Do it?</th>
-			<th>Preset name</th>
-			<th></th>
+			<th>{{ knp_pagination_sortable(pagination, 'Name', 'a.name') }}</th>
+			<th>{{ knp_pagination_sortable(pagination, 'Mode', 'a.mode') }} </th>
+			<th>{{ knp_pagination_sortable(pagination, 'Width', 'a.width') }}</th>
+			<th>{{ knp_pagination_sortable(pagination, 'Height', 'a.height') }}</th>
 			<th></th>
 			<th></th>
 		</tr>
-		{% for preset in presets %}
-			<li>
-				<input type="radio" name="preset" value="{{preset.id}}">
-				<a href="{{ path('show_preset', {'id': preset.id}) }}">{{ preset.name }} </a>
-				({{preset.mode}}, {{preset.width}}, {{preset.height}}) | 
-				<a href="{{ path('update_preset', {'id': preset.id}) }}"> update! </a> | 
-				<a href="#" id={{preset.id}} class="ajax_delete"> destroy! </a>
-				</br>
-			</li>
+		
+		{% for preset in pagination %}
+			<tr> 
+				<td><input type="radio" name="preset" value="{{preset.id}}"> </td>
+				<td><a href="{{ path('show_preset', {'id': preset.id}) }}">{{ preset.name }} </a> </td>
+				<td>{{preset.mode}} </td>
+				<td>{{preset.width}} </td>
+				<td>{{preset.height}} </td> 
+				<td><a href="{{ path('update_preset', {'id': preset.id}) }}"> update! </a> </td>
+				<td><a href="#" id={{preset.id}} class="ajax_delete"> destroy! </a> </td> 
+			</tr> 
 		{% endfor %}
-
+		
+		</table>
+		<div class="navigation">
+			{{ knp_pagination_render(pagination) }}
+		</div>
+		
 		</br>
 		<a href={{ path('new_preset') }}>Create preset</a>
 	</div>
@@ -44,6 +53,7 @@
 		<button class="ajax_create_preset">Apply preset!</button>
 	</div>
 	
+	<a href="{{ path('acme_image_homepage', { 'per_page': preset_count }) }}">Show all!</a>
 	
 <script>
 	function applyPreset(){

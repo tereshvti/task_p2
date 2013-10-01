@@ -9,7 +9,8 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.*",
-        "symfony/class-loader": "2.4.*@dev",
+        "symfony/class-loader": "2.3.*@dev",
+		"knplabs/knp-paginator-bundle": "dev-master",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
         "twig/extensions": "1.0.*",

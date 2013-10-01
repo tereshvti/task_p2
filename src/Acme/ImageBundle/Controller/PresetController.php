@@ -12,23 +12,42 @@ use Symfony\Component\Filesystem\Exception\IOException;
 
 class PresetController extends Controller
 {	
-    public function indexAction()
+    public function indexAction($per_page = 5)
     {
 		$resize = $this->get('image_resize');
-        $presets = $this->getDoctrine()
+        $preset_count = count($this->getDoctrine()
 			->getRepository('AcmeImageBundle:Preset2')
-			->findAll();
-/*
+			->findAll());
+		
+		/*
 		if (!$presets) {
 			throw $this->createNotFoundException(
 				'No presets found :('
 			);
 		}*/
+		
+		$em    = $this->getDoctrine()->getManager();
+		$dql   = "SELECT a FROM AcmeImageBundle:Preset2 a";
+		$query = $em->createQuery($dql);
+		
+		$request = $this->container->get('request');        
+		if ($request->query->get('per_page')) $per_page = $request->query->get('per_page');
+		
+		$paginator  = $this->get('knp_paginator');
+		$pagination = $paginator->paginate(
+			$query,
+			$this->get('request')->query->get('page', 1),
+			$per_page
+		);
+		
+		
 		//получаем список файлов в \images\origins
 		$dir = getcwd() . '\images\origins';
 		$origins = $resize->find_all_files($dir);
 		
-        return $this->render('AcmeImageBundle:Preset:index.html.twig', array('presets' => $presets, 'origins' => $origins));
+		return $this->render('AcmeImageBundle:Preset:index2.html.twig', array('pagination' => $pagination, 'origins' => $origins, 'preset_count' => $preset_count));
+        //return $this->render('AcmeImageBundle:Preset:index2.html.twig', array('presets' => $presets, 'origins' => $origins));
+
     }
 
 	 public function showAction($id)
