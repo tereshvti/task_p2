@@ -79,7 +79,7 @@
 				{id: button.attr('id')}, 
 			function(response){
 					if(response.code == 100 && response.success){
-						button.parent().remove();
+						button.parent().parent().remove();
 					}
 
 		}, "json");    
